@@ -1,13 +1,15 @@
-import firebase from '../firebase'
-import Profile from '../routes/Profile'
+import { useState } from 'react'
+import { authService } from 'fbase'
+import Profile from 'routes/Profile'
 import AppRouter from './Router'
 
 function App() {
-  console.log('firebase--', firebase)
+  const [isLoggedIn, setIsLoggedIn] = useState(authService.currentUser)
   return (
-    <div className="App">
-      <AppRouter />
-    </div>
+    <>
+      <AppRouter isLoggedIn={isLoggedIn} />
+      <footer>&copy; {new Date().getFullYear()} Nwitter</footer>
+    </>
   );
 }
 
