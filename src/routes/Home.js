@@ -1,12 +1,20 @@
 import { useState } from 'react'
+import { dbService } from 'fbase'
 
 const Home = () => {
   const [nweet, setNweet] = useState('')
   const onChange = (e) => {
     const { target: { value }} = e
+    setNweet(value)
   }
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault()
+    const result = await dbService.collection('nweets').add({
+      nweet,
+      createdAt: Date.now()
+    })
+    console.log(result)
+    setNweet('')
   }
   return (
     <div>
