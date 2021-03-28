@@ -7,11 +7,12 @@ const Home = ({ userObj }) => {
   const [nweets, setNweets] = useState([])
   useEffect(() => {
     dbService.collection('nweets').onSnapshot((snapshot) => {
-      console.log('something happend')
-      const nweetArray = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }))
+      const nweetArray = snapshot.docs.map(doc => {
+        return {
+          id: doc.id,
+          ...doc.data()
+        }
+      })
       setNweets(nweetArray)
     })
   }, [])
