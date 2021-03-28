@@ -5,7 +5,14 @@ const Home = ({ userObj }) => {
   const [nweet, setNweet] = useState('')
   const [nweets, setNweets] = useState([])
   useEffect(() => {
-    getNweets()
+    dbService.collection('nweets').onSnapshot((snapshot) => {
+      console.log('something happend')
+      const nweetArray = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }))
+      setNweets(nweetArray)
+    })
   }, [])
 
   const onChange = (e) => {
@@ -13,17 +20,6 @@ const Home = ({ userObj }) => {
     setNweet(value)
   }
 
-  const getNweets = async () => {
-    const dbNweets = await dbService.collection('nweets').get()
-    dbNweets.forEach((document) => {
-      const nweetObject = {
-        ...document.data(),
-        id: document.id
-      }
-      setNweets((prev) => [nweetObject, ...prev])
-    })
-  }
-  
   const onSubmit = async (e) => {
     e.preventDefault()
     const result = await dbService.collection('nweets').add({
@@ -43,7 +39,7 @@ const Home = ({ userObj }) => {
       <div>
         {nweets.map((nweet) => (
           <div key={nweet.id}>
-            <h4>{nweet.nweet}</h4>
+            <h4>{nweet.text}</h4>
           </div>
         ))}
       </div>
