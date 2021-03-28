@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { dbService } from 'fbase'
 
-const Home = () => {
+const Home = ({ userObj }) => {
   const [nweet, setNweet] = useState('')
   const onChange = (e) => {
     const { target: { value }} = e
@@ -24,10 +24,10 @@ const Home = () => {
   const onSubmit = async (e) => {
     e.preventDefault()
     const result = await dbService.collection('nweets').add({
-      nweet,
-      createdAt: Date.now()
+      text: nweet,
+      createdAt: Date.now(),
+      creatorId: userObj.uid
     })
-    console.log(result)
     setNweet('')
   }
 
